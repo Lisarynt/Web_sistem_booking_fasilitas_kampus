@@ -1,5 +1,5 @@
 <?php
-require_once 'cors.php';
+require_once __DIR__ . '/../cors.php';
 $database_hostname = "localhost";
 $database_username = "root";
 $database_password = "";

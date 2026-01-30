@@ -1,23 +1,23 @@
 <?php
 include 'koneksi/connection.php'; 
 
+$error_message = '';
+$success_message = '';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = $_POST['nama'];
-    $nim = $_POST['nim']; // Ganti email jadi nim
+    $nim = $_POST['nim']; 
     $password = $_POST['password'];
     $password_hashed = password_hash($password, PASSWORD_BCRYPT);
 
     try {
-        // PERBAIKAN: Nama tabel 'data_user' dan kolom 'nim' sesuai database terbaru
         $stmt = $database_connection->prepare("SELECT nim FROM data_user WHERE nim = :nim");
         $stmt->bindParam(':nim', $nim);
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
-            // NOTIFIKASI JIKA NIM SUDAH ADA
             echo "<script>alert('Gagal: NIM sudah terdaftar!'); window.location='regist.php';</script>";
         } else {
-            // PERBAIKAN: Insert ke tabel 'data_user'
             $insert = $database_connection->prepare("INSERT INTO data_user (nama, nim, password) VALUES (:nama, :nim, :password)");
             $insert->bindParam(':nama', $nama);
             $insert->bindParam(':nim', $nim);
@@ -46,49 +46,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-    <div class="login-container">
-        <div class="login-card">
-            <div class="side-panel">
-                <div>
-                    <h3 class="fw-bold">UniReserve</h3>
-                    <p class="extra-small">Campus Facility Booking System.</p>
-                </div>
-                <div>
-                    <h5 class="fw-semibold">Bergabunglah!</h5>
-                    <p class="extra-small opacity-75">Satu akun untuk semua peminjaman fasilitas.</p>
-                </div>
+   <div class="login-container">
+    <div class="login-card flex-row-reverse">
+        <div class="side-panel">
+            <div class="side-content">
+                <h3 class="fw-bold">UniReserve</h3>
+                <p>Campus Facility Booking System.</p>
             </div>
+            <div class="side-content">
+                <h5 class="fw-semibold">Bergabunglah!</h5>
+                <p class="opacity-75">Satu akun untuk semua peminjaman fasilitas.</p>
+            </div>
+        </div>
 
-            <div class="form-panel">
-                <h5 class="fw-bold mb-1">Daftar Akun Mahasiswa</h5>
-                <p class="text-muted mb-4 extra-small">Lengkapi data diri untuk buat akun baru.</p>
+        <div class="form-panel">
+            <div class="form-box">
+                <h2>Daftar Akun</h2>
+                <p class="text-muted mb-4">Lengkapi data diri untuk buat akun baru.</p>
 
-                <form action="" method="POST">
-                    <div class="mb-3 d-flex flex-column">
-                        <label class="form-label fw-bold text-secondary">NAMA LENGKAP</label>
+                <form action="regist.php" method="POST">
+                    <div class="mb-4">
+                        <label class="form-label">NAMA LENGKAP</label>
                         <input type="text" name="nama" class="form-control" placeholder="Nama Lengkap Sesuai KTM" required>
                     </div>
 
-                    <div class="mb-3 d-flex flex-column">
-                        <label class="form-label fw-bold text-secondary">NIM (NOMOR INDUK MAHASISWA)</label>
+                    <div class="mb-4">
+                        <label class="form-label">NIM (NOMOR INDUK MAHASISWA)</label>
                         <input type="text" name="nim" class="form-control" placeholder="Contoh: 21040101" required>
                     </div>
                     
-                    <div class="mb-4 d-flex flex-column">
-                        <label class="form-label fw-bold text-secondary">PASSWORD</label>
+                    <div class="mb-4">
+                        <label class="form-label">PASSWORD</label>
                         <input type="password" name="password" class="form-control" placeholder="Minimal 8 karakter" required>
                     </div>
                     
-                    <button type="submit" name="register" class="btn btn-primary w-100 fw-bold py-2 mb-3">DAFTAR SEKARANG</button>
+                    <button type="submit" name="register" class="btn btn-primary-res" style="background-color: #9de463 !important; color: #000 !important;">DAFTAR SEKARANG</button>
                     
-                    <div class="text-center">
-                        <p class="extra-small text-muted">Sudah punya akun? <br> 
-                        <a href="login.php" class="text-primary fw-bold text-decoration-none">Masuk Disini</a></p>
+                    <div class="text-center mt-4">
+                        <p class="small text-muted">Sudah punya akun? <br> 
+                        <a href="login.php" style="color: #1A1C1E; font-weight: 700; text-decoration: none;">Masuk Disini</a></p>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+</div>
 
     <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 

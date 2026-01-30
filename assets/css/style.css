@@ -1,134 +1,152 @@
+/* 1. VARIABEL & RESET */
+:root {
+    --primary-color: #9de463;
+    --primary-hover: #92d45c;
+    --bg-light: #fcfcfc;
+    --border-color: #f0f0f0;
+    --text-muted: #999;
+}
+
 * {
     font-family: 'Poppins', sans-serif;
-}
-
-body {
-    background-image: url('../images/bglogin.jpeg'); 
-    background-size: cover; /* Tetap cover agar menutupi seluruh layar */
-    background-position: right center; /* Geser gambar ke kanan agar objek buku tidak tertutup kartu login */
-    background-attachment: fixed;
-    height: 100vh;
+    box-sizing: border-box;
     margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; 
+    padding: 0;
 }
 
-.login-container {
-    padding-left: 5%; /* Menjaga agar tetap di area putih background */
+/* 2. STYLE GLOBAL (Bisa dipakai di Landing & Dashboard) */
+body, html {
+    height: 100%;
+}
+
+.btn-primary-res {
+    background: var(--primary-color); 
+    color: #1A1C1E !important;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
     width: 100%;
+    box-shadow: 0 8px 15px rgba(157, 228, 99, 0.3);
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary-res:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+/* 3. LAYOUT LOGIN & REGIST (Tetap Seperti Semula) */
+.login-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    background: #fff;
+    overflow: hidden; 
 }
 
 .login-card {
     display: flex;
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 600px;
-    min-height: 520px; /* Ditambah agar form Registrasi tidak sesak */
-    align-items: stretch;
+    height: 100%;
+    overflow: hidden;
 }
 
-/* Panel Biru */
 .side-panel {
-    background: #1e3c72;
-    color: white;
-    padding: 30px 20px;
-    width: 35%;
+    width: 50%;
+    background-image: url('../images/loginbg.jpg'); 
+    background-size: cover;
+    background-position: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 60px;
+    position: relative;
+    z-index: 2;
 }
 
-.side-panel h3 {
-    letter-spacing: 1px;
-    text-transform: uppercase;
+.side-panel::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 1;
 }
 
-/* Panel Form */
+.side-content {
+    position: relative;
+    color: white;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    z-index: 2;
+}
+
 .form-panel {
-    padding: 35px;
-    width: 65%;
+    width: 50%;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-light);
 }
 
-.extra-small {
-    font-size: 0.7rem;
+.form-box {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid #eeeeee;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+}
+
+/* 4. FORM ELEMENTS */
+.form-box h2 {
+    font-weight: 700;
+    font-size: 2.1rem;
+    margin-bottom: 8px;
+    color: #222;
 }
 
 .form-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    display: block;
 }
 
 .form-control {
-    border: none;
-    border-bottom: 1.5px solid #ececec;
-    border-radius: 0;
-    padding: 5px 0;
-    font-size: 0.85rem;
     width: 100%;
-    transition: all 0.3s ease; /* Animasi halus saat klik */
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    background-color: #fff;
+    transition: all 0.3s ease;
 }
 
 .form-control:focus {
-    box-shadow: none;
-    border-color: #1e3c72;
+    border-color: var(--primary-color);
+    box-shadow: 0 5px 15px rgba(255, 75, 43, 0.1);
+    outline: none;
 }
 
-.btn-primary {
-    background-color: #1e3c72;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    transition: background 0.3s ease;
+/* 5. UTILITY */
+.mb-4 { margin-bottom: 15px !important; }
+.text-muted { font-size: 0.85rem; color: #6c757d; }
+.flex-row-reverse { flex-direction: row-reverse; }
+
+/* 6. RESPONSIVE */
+@media (max-width: 992px) {
+    .side-panel { display: none; }
+    .form-panel { width: 100%; padding: 20px; }
+    .form-box { box-shadow: none; border: none; padding: 20px; }
 }
 
-.btn-primary:hover {
-    background-color: #152b52;
-}
-
-/* Link hover effect agar lebih interaktif */
-.form-panel a {
-    transition: color 0.2s;
-}
-
-.form-panel a:hover {
-    color: #152b52 !important;
-    text-decoration: underline !important;
-}
-
-/* Perbaikan untuk tampilan Mobile & Tablet */
-@media (max-width: 768px) {
-    .login-container {
-        padding-left: 0;
-        display: flex;
-        justify-content: center;
-        padding: 20px;
-    }
-}
-
-@media (max-width: 576px) {
-    .side-panel {
-        display: none;
-    }
-    .form-panel {
-        width: 100%;
-    }
-    .login-card {
-        max-width: 100%;
-        min-height: auto;
-    }
-}
-
-/* Footer Styling */
-footer {
-    pointer-events: none;
-}
-
-footer span {
-    font-size: 0.65rem;
-    letter-spacing: 1px;
-}

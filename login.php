@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $upd = $database_connection->prepare("UPDATE data_user SET token=? WHERE id=?");
         $upd->execute([$tokenHash, (int)$user['id']]);
 
-        setcookie("auth_token", $token, [
+        setcookie("user_auth_token", $token, [
             'expires' => time() + (60 * 60 * 24 * 14),
             'path' => '/',
             'httponly' => true,
@@ -63,50 +63,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistem Peminjaman Kampus</title>
-    <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-    <div class="login-container">
-        <div class="login-card">
-            <div class="side-panel">
-                <div>
-                    <h3 class="fw-bold">UniReserve</h3>
-                    <p class="extra-small">Campus Facility Booking System.</p>
-                </div>
-                <div>
-                    <p class="small m-0">Portal Mahasiswa</p>
-                    <p class="extra-small opacity-75">Gunakan NIM untuk mengakses layanan.</p>
-                </div>
+<div class="login-container">
+    <div class="login-card">
+        <div class="side-panel">
+            <div class="side-content">
+                <h3 class="fw-bold">UniReserve</h3>
+                <p class="small">Campus Facility Booking System.</p>
             </div>
+            <div class="side-content">
+                <p class="small m-0 fw-bold">Portal Mahasiswa</p>
+                <p class="extra-small opacity-75">Gunakan NIM untuk akses layanan.</p>
+            </div>
+        </div>
 
-            <div class="form-panel">
-                <h5 class="fw-bold mb-1">Masuk Akun</h5>
-                <p class="text-muted mb-4 extra-small">Silakan masukkan identitas kampus Anda.</p>
+        <div class="form-panel">
+            <div class="form-box">
+                <h2>Masuk Akun</h2>
+                <p class="text-muted mb-4">Selamat datang kembali di UniReserve.</p>
 
-                <form id="loginForm">
-                    <div class="mb-3 d-flex flex-column">
-                        <label class="form-label fw-bold text-secondary">NOMOR INDUK MAHASISWA (NIM)</label>
-                        <input type="text" name="nim" class="form-control" placeholder="Contoh: 21040101" required>
+                <form id="loginForm" action="" method="POST">
+                    <div class="mb-4">
+                        <label class="form-label">NOMOR INDUK MAHASISWA (NIM)</label>
+                        <input type="text" name="nim" class="form-control" placeholder="Masukkan NIM Anda" required>
                     </div>
                     
-                    <div class="mb-4 d-flex flex-column">
-                        <label class="form-label fw-bold text-secondary">PASSWORD</label>
-                        <input type="password" name="password" class="form-control" placeholder="********" required>
+                    <div class="mb-4">
+                        <label class="form-label">PASSWORD</label>
+                        <input type="password" name="password" class="form-control" placeholder="Masukkan Password" required>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary w-100 fw-bold py-2 mb-3">MASUK SEKARANG</button>
+                    <button type="submit" name="login" class="btn btn-primary-res" style="background-color: #9de463 !important; color: #000 !important;">MASUK SEKARANG</button>
                     
-                    <div class="text-center">
-                        <p class="extra-small text-muted">Belum punya akun? <br> 
-                        <a href="regist.php" class="text-primary fw-bold text-decoration-none">Daftar Akun Baru</a></p>
+                    <div class="text-center mt-4">
+                        <p class="small text-muted">Belum punya akun? 
+                        <a href="regist.php" style="color: #1A1C1E; font-weight: 700; text-decoration: none;">Daftar Disini</a></p>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="landing_page.php" style="color: #999; font-size: 0.8rem; text-decoration: none;">← Kembali ke Beranda</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+</div>
 
     <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
     
