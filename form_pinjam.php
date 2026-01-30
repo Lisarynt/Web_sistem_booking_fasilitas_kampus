@@ -1,6 +1,27 @@
 <?php
 require_once 'koneksi/connection.php';
 
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+
+$token = $_COOKIE['user_auth_token'] ?? ''; 
+if (!$token) {
+    header("Location: login.php");
+    exit();
+}
+
+$tokenHash = hash('sha256', $token);
+$stmt_auth = $database_connection->prepare("SELECT id FROM data_user WHERE token = ?");
+$stmt_auth->execute([$tokenHash]);
+$user_logged = $stmt_auth->fetch();
+
+if (!$user_logged) {
+    header("Location: login.php");
+    exit();
+}
+// Ambil ID untuk simpan ke database nanti
+$id_mahasiswa_login = $user_logged['id'];
+
 // AMBIL DATA LAMA JIKA SEDANG MODE EDIT
 $data_edit = null;
 if (isset($_GET['edit'])) {
@@ -37,6 +58,12 @@ try {
         .btn-submit { background: #B4F481; color: #1A1C1E; border: none; padding: 15px; border-radius: 12px; font-weight: 700; width: 100%; transition: 0.3s; }
         .btn-submit:hover { background: #a2db74; transform: translateY(-2px); }
     </style>
+
+    <?php include 'checkcookie.php'; ?>
+    <script>
+        // Jalankan fungsi dari checkcookie.php
+        checkLoginStatus(); 
+    </script>
 </head>
 <body>
 
@@ -49,7 +76,7 @@ try {
         <a class="nav-link" href="riwayat.php"><i class="bi bi-clock-history me-2"></i> Riwayat</a>
         <a class="nav-link" href="profil.php"><i class="bi bi-person me-2"></i> Profil</a>
     </nav>
-    <a href="#" id="logout" class="nav-link text-danger mt-auto">
+    <a href="flow/logout.php" id="logout" class="nav-link text-danger mt-auto">
         <i class="bi bi-box-arrow-left"></i> Keluar
     </a>
 </div>

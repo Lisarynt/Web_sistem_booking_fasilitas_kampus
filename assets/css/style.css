@@ -14,9 +14,17 @@
     padding: 0;
 }
 
-/* 2. STYLE GLOBAL (Bisa dipakai di Landing & Dashboard) */
-body, html {
+/* 2. STYLE GLOBAL */
+html {
     height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    background-color: var(--bg-light);
 }
 
 .btn-primary-res {
@@ -42,20 +50,31 @@ body, html {
     transform: translateY(-1px);
 }
 
-/* 3. LAYOUT LOGIN & REGIST (Tetap Seperti Semula) */
+/* 3. LAYOUT LOGIN & REGIST */
 .login-container {
     display: flex;
     height: 100vh;
     width: 100vw;
-    background: #fff;
-    overflow: hidden; 
+    overflow: hidden;
+}
+
+.auth-footer-wrapper {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: transparent;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    z-index: 999;
+    padding: 0 20px;
 }
 
 .login-card {
     display: flex;
     width: 100%;
     height: 100%;
-    overflow: hidden;
 }
 
 .side-panel {
@@ -88,11 +107,14 @@ body, html {
 
 .form-panel {
     width: 50%;
-    padding: 40px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     background: var(--bg-light);
+    height: 100%;
+    position: relative;
+    padding: 40px 40px 80px 40px; /* Kasih ruang ekstra di bawah untuk footer */
 }
 
 .form-box {
@@ -149,4 +171,3 @@ body, html {
     .form-panel { width: 100%; padding: 20px; }
     .form-box { box-shadow: none; border: none; padding: 20px; }
 }
-

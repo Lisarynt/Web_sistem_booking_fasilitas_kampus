@@ -3,18 +3,25 @@
 require_once '../koneksi/connection.php';
 
 // Pengecekan Token sesuai standar dosen kamu
-$token = $_COOKIE['auth_token'] ?? '';
-
+$token = $_COOKIE['user_auth_token'] ?? '';
 if ($token === '') {
     http_response_code(401);
-    echo json_encode(["success" => false, "message" => "No auth cookie"]);
-    exit;
+    exit(json_encode(["success" => false, "message" => "Unauthorized"]));
 }
 
-// Ambil ID mahasiswa dari cookie
-$id_mahasiswa = $_COOKIE['id'] ?? 1;
-
 try {
+    $tokenHash = hash('sha256', $token);
+    $stmt_user = $database_connection->prepare("SELECT id FROM data_user WHERE token = ?");
+    $stmt_user->execute([$tokenHash]);
+    $user = $stmt_user->fetch(PDO::FETCH_ASSOC);
+
+    if (!$user) {
+        http_response_code(401);
+        exit(json_encode(["success" => false]));
+    }
+
+    $id_mahasiswa = $user['id'];
+
     // Query untuk mengambil riwayat peminjaman user tersebut
     // Kita gunakan JOIN agar nama kategori fasilitasnya ikut terbawa
     $sql = "SELECT p.*, k.nama_kategori 
@@ -26,12 +33,7 @@ try {
     $connect = $database_connection->prepare($sql);
     $connect->execute([$id_mahasiswa]);
 
-    $data = array();
-    while ($row = $connect->fetch(PDO::FETCH_ASSOC)) {
-        // Kamu bisa menambahkan logika manipulasi data di sini jika perlu
-        // Contoh: Format tanggal atau status agar lebih rapi sebelum dikirim ke JSON
-        array_push($data, $row);
-    }
+    $data = $connect->fetchAll(PDO::FETCH_ASSOC);
 
     // Mengirimkan hasil dalam format JSON agar bisa dibaca oleh Chart.js atau tabel dinamis
     header('Content-Type: application/json');

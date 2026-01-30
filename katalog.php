@@ -1,6 +1,20 @@
 <?php
 require_once 'koneksi/connection.php';
 
+$token = $_COOKIE['user_auth_token'] ?? ''; 
+if (!$token) {
+    header("Location: login.php");
+    exit();
+}
+// Cek validitas token ke DB (Sama seperti dashboard)
+$tokenHash = hash('sha256', $token);
+$stmt_auth = $database_connection->prepare("SELECT id FROM data_user WHERE token = ?");
+$stmt_auth->execute([$tokenHash]);
+if (!$stmt_auth->fetch()) {
+    header("Location: login.php");
+    exit();
+}
+
 try {
     // Mengambil semua data kategori fasilitas
     $query = $database_connection->query("SELECT * FROM kategori_fasilitas");
@@ -41,7 +55,7 @@ try {
         <a class="nav-link" href="riwayat.php"><i class="bi bi-clock-history me-2"></i> Riwayat</a>
         <a class="nav-link" href="profil.php"><i class="bi bi-person me-2"></i> Profil</a> 
     </nav>
-    <a href="#" id="logout" class="nav-link text-danger mt-auto">
+    <a href="flow/logout.php" id="logout" class="nav-link text-danger mt-auto">
         <i class="bi bi-box-arrow-left"></i> Keluar
     </a>
 </div>

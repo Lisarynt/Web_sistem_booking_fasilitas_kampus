@@ -9,6 +9,13 @@ if (!$token) {
 }
 
 try {
+    $tokenHash = hash('sha256', $token);
+    $check = $database_connection->prepare("SELECT id_admin FROM admins WHERE cookie_token = ? LIMIT 1");
+    $check->execute([$tokenHash]);
+    if (!$check->fetch()) {
+        header("Location: login_admin.php");
+        exit();
+    }
     // Ambil semua daftar fasilitas
     $sql = "SELECT * FROM kategori_fasilitas ORDER BY nama_kategori ASC";
     $stmt = $database_connection->query($sql);
@@ -93,6 +100,7 @@ try {
             </tbody>
         </table>
     </div>
+    <?php include 'footer.php'; ?>
 </div>
 
 <div class="modal fade" id="modalFasilitas" tabindex="-1">
@@ -114,7 +122,6 @@ try {
             </div>
         </form>
     </div>
-    <?php include 'footer.php'; ?>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

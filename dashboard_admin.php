@@ -1,4 +1,7 @@
 <?php
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 require_once 'koneksi/connection.php';
 
 // Logika Keamanan: Cek apakah yang login adalah admin
@@ -9,7 +12,23 @@ if (!$token) {
 }
 
 try {
+    $tokenHash = hash('sha256', $token);
+    $sql_admin = "SELECT id_admin, username FROM admins WHERE cookie_token = ? LIMIT 1";
+    $stmt_admin = $database_connection->prepare($sql_admin);
+    $stmt_admin->execute([$tokenHash]);
+    $admin = $stmt_admin->fetch(PDO::FETCH_ASSOC);
+
+    if (!$admin) {
+        // Jika token tidak valid atau bukan admin, hapus cookie dan tendang keluar
+        setcookie("admin_auth_token", "", time() - 3600, "/");
+        header("Location: login_admin.php");
+        exit();
+    }
+
+    // Jika lolos, ambil nama admin untuk tampilan
+    $nama_admin = $admin['username'];
     // Ambil Data Statistik Utama
+    
     $sql_stat = "SELECT 
         COUNT(CASE WHEN status_pengajuan = 'Pending' THEN 1 END) as pending,
         COUNT(CASE WHEN status_pengajuan = 'Disetujui' THEN 1 END) as disetujui,
@@ -50,6 +69,15 @@ try {
         .table-card { background: #fff; border-radius: 25px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .badge-pending { background: #FFF4E5; color: #FF9800; }
     </style>
+    <script src="checkcookie.php"></script>
+    <script>
+    // Cek status login saat halaman dimuat
+    checkLoginStatus().then(isValid => {
+        if (!isValid) {
+            window.location.href = "login_admin.php";
+        }
+    });
+</script>
 </head>
 <body>
 
@@ -127,6 +155,7 @@ try {
             </table>
         </div>
     </div>
+    <?php include 'footer.php'; ?>
 </div>
 
 <div class="modal fade" id="modalTolak" tabindex="-1">
@@ -146,8 +175,8 @@ try {
       </div>
     </form>
   </div>
-  <?php include 'footer.php'; ?>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>

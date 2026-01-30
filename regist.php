@@ -40,13 +40,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Akun - UniReserve</title>
-    <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-   <div class="login-container">
+<div class="login-container">
     <div class="login-card flex-row-reverse">
         <div class="side-panel">
             <div class="side-content">
@@ -83,16 +83,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <button type="submit" name="register" class="btn btn-primary-res" style="background-color: #9de463 !important; color: #000 !important;">DAFTAR SEKARANG</button>
                     
                     <div class="text-center mt-4">
-                        <p class="small text-muted">Sudah punya akun? <br> 
+                        <p class="small text-muted">Sudah punya akun? 
                         <a href="login.php" style="color: #1A1C1E; font-weight: 700; text-decoration: none;">Masuk Disini</a></p>
                     </div>
                 </form>
             </div>
+            
+            <!-- Footer dipindah keluar dari form-box, sama seperti di login.php -->
+            <footer class="auth-footer-wrapper">
+                <?php include 'footer.php'; ?>
+            </footer>
         </div>
     </div>
 </div>
 
-    <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+<script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

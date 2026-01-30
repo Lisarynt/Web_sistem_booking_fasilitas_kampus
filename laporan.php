@@ -1,8 +1,26 @@
 <?php
 require_once 'koneksi/connection.php';
 
+// --- PROTEKSI BACKEND (WAJIB UAS) ---
+$token = $_COOKIE['admin_auth_token'] ?? ''; 
+if (!$token) {
+    header("Location: login_admin.php");
+    exit();
+}
+
 // Ambil data dari database untuk laporan
 try {
+    // Validasi token ke tabel admins
+    $tokenHash = hash('sha256', $token);
+    $check = $database_connection->prepare("SELECT id_admin FROM admins WHERE cookie_token = ? LIMIT 1");
+    $check->execute([$tokenHash]);
+    $admin = $check->fetch();
+    
+    if (!$admin) {
+        header("Location: login_admin.php");
+        exit();
+    }
+    
     $sql = "SELECT p.*, u.nama, u.nim, k.nama_kategori 
             FROM peminjaman p 
             JOIN data_user u ON p.id = u.id 

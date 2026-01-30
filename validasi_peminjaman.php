@@ -9,6 +9,13 @@ if (!$token) {
 }
 
 try {
+    $tokenHash = hash('sha256', $token);
+    $check = $database_connection->prepare("SELECT id_admin FROM admins WHERE cookie_token = ? LIMIT 1");
+    $check->execute([$tokenHash]);
+    if (!$check->fetch()) {
+        header("Location: login_admin.php");
+        exit();
+    }
     // Ambil semua data peminjaman, gabung dengan nama user dan nama kategori
     $sql = "SELECT p.*, u.nama, u.nim, k.nama_kategori 
             FROM peminjaman p
@@ -112,6 +119,7 @@ try {
             </table>
         </div>
     </div>
+    <?php include 'footer.php'; ?>
 </div>
 
 <div class="modal fade" id="modalTolak" tabindex="-1">

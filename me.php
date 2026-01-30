@@ -1,7 +1,7 @@
 <?php
 require_once 'koneksi/connection.php'; // Sesuaikan path
 
-$token = $_COOKIE['auth_token'] ?? '';
+$token = $_COOKIE['user_auth_token'] ?? $_COOKIE['admin_auth_token'] ?? '';
 
 if ($token === '') {
     http_response_code(401);
@@ -14,7 +14,7 @@ try {
 
     // SESUAIKAN: Ambil kolom id, nim, nama dari tabel data_user
     $stmt = $database_connection->prepare(
-        "SELECT id, nim, nama FROM data_user WHERE token=? LIMIT 1"
+        "SELECT id, nim, nama, role FROM data_user WHERE token=? LIMIT 1"
     );
     $stmt->execute([$tokenHash]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -29,8 +29,9 @@ try {
         "success" => true,
         "data" => [
             "id" => (int)$user['id'],
-            "nim" => $user['nim'],
+            "nim" => $user['nim'] ?? 'ADMIN',
             "nama" => $user['nama']
+            "role" => $user['role']
         ]
     ]);
 } catch (Exception $e) {

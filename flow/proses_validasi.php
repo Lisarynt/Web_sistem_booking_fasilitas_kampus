@@ -6,6 +6,14 @@ $token = $_COOKIE['admin_auth_token'] ?? '';
 if (!$token) {
     header("Location: ../login_admin.php");
     exit();
+}   
+
+$tokenHash = hash('sha256', $token);
+$stmt = $database_connection->prepare("SELECT role FROM data_user WHERE token = ? AND role = 'admin'");
+$stmt->execute([$tokenHash]);
+if (!$stmt->fetch()) { 
+    // Jika token ada di cookie tapi tidak ada di DB atau bukan admin
+    die("Akses Ditolak!"); 
 }
 
 // Ambil data dari request

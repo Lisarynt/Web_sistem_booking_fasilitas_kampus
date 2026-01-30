@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'samesite' => 'Lax'
             ]);
 
-            echo json_encode(["success" => true, "message" => "Login Berhasil!", "redirect" => "dashboard_admin.php"]);
+        echo json_encode(["success" => true, "message" => "Login Berhasil!", "redirect" => "dashboard_admin.php"]);
             exit;
         } else {
             http_response_code(401);
@@ -89,6 +89,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </form>
             </div>
+    <footer class="auth-footer-wrapper">
+        <?php include 'footer.php'; ?>
+    </footer>
         </div>
     </div>
 </div>

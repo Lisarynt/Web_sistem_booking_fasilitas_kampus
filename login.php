@@ -110,11 +110,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </form>
             </div>
+    <footer class="auth-footer-wrapper">
+        <?php include 'footer.php'; ?>
+    </footer>
         </div>
     </div>
 </div>
-
-    <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -141,6 +143,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     });
     </script>
-
 </body>
 </html>
