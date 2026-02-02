@@ -3,7 +3,6 @@ require_once 'koneksi/connection.php';
 $id = $_GET['id'] ?? '';
 if (!$id) { die("ID Tidak ditemukan"); }
 
-// Ambil data dari database
 $sql = "SELECT p.*, u.nama, u.nim, k.nama_kategori 
         FROM peminjaman p 
         JOIN data_user u ON p.id = u.id 
@@ -31,7 +30,6 @@ if (!$data) { die("Data tidak ditemukan"); }
 
     <script>
     function generatePDF() {
-        // 2. Definisikan isi PDF (Data dari PHP dimasukkan ke sini)
         var docDefinition = {
             content: [
                 { text: 'UNIVERSITAS UNIRESERVE', style: 'header', alignment: 'center' },
@@ -75,10 +73,8 @@ if (!$data) { die("Data tidak ditemukan"); }
             }
         };
 
-        // 3. Perintah download otomatis
         pdfMake.createPdf(docDefinition).download('Bukti_Pinjam_<?= $data['id_peminjaman'] ?>.pdf');
 
-        // Kembali ke riwayat setelah download selesai (opsional)
         setTimeout(function() {
             window.location.href = 'riwayat.php';
         }, 2000);

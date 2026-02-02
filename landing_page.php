@@ -10,16 +10,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        /* SINKRONISASI WARNA EDUPLEX */
         :root { 
-            --primary-color: #B4F481; /* Hijau Neon Dashboard */
-            --dark-color: #1A1C1E;    /* Hitam Sidebar */
+            --primary-color: #B4F481; 
+            --dark-color: #1A1C1E;   
             --bg-light: #F8F9FD;
         }
         
         body { font-family: 'Poppins', sans-serif; overflow-x: hidden; background-color: var(--bg-light); }
 
-        /* NAVBAR */
+
         .navbar { 
             background: white !important; 
             padding: 15px 0; 
@@ -31,11 +30,11 @@
         }
         
         .navbar-brand { color: var(--dark-color) !important; font-weight: 800; font-size: 1.6rem; }
-        .navbar-brand span { color: #82c91e; } /* Variasi hijau lebih gelap untuk teks */
+        .navbar-brand span { color: #82c91e; } 
         .nav-link { color: #555 !important; font-weight: 500; }
         .nav-link:hover { color: var(--dark-color) !important; }
 
-        /* Tombol Portal Admin */
+
         .btn-portal {
             background-color: var(--dark-color);
             color: var(--primary-color) !important;
@@ -48,7 +47,6 @@
             transform: translateY(-2px);
         }
 
-        /* HERO SECTION */
         .hero {
             height: 100vh;
             background: linear-gradient(rgba(26, 28, 30, 0.7), rgba(26, 28, 30, 0.6)), url('assets/images/lpage.jpg');
@@ -73,7 +71,6 @@
             color: var(--dark-color);
         }
 
-        /* ALUR PEMINJAMAN */
         .step-icon {
             width: 70px; height: 70px;
             background: rgba(180, 244, 129, 0.2);

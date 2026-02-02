@@ -1,7 +1,6 @@
 <script>
 async function checkLoginStatus() {
     try {
-        // Panggil me.php di folder yang sama
         const response = await fetch('me.php', {
             method: 'GET',
             credentials: 'include' 

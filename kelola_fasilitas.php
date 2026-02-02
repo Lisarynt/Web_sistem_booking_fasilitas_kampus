@@ -1,7 +1,6 @@
 <?php
 require_once 'koneksi/connection.php';
 
-// Proteksi Admin
 $token = $_COOKIE['admin_auth_token'] ?? ''; 
 if (!$token) {
     header("Location: login_admin.php");
@@ -16,7 +15,6 @@ try {
         header("Location: login_admin.php");
         exit();
     }
-    // Ambil semua daftar fasilitas
     $sql = "SELECT * FROM kategori_fasilitas ORDER BY nama_kategori ASC";
     $stmt = $database_connection->query($sql);
     $fasilitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -129,7 +127,6 @@ try {
     const modal = new bootstrap.Modal(document.getElementById('modalFasilitas'));
     const modalTambah = document.querySelector('[data-bs-target="#modalTambah"]');
     
-    // Fungsi untuk mode Tambah
     modalTambah.addEventListener('click', () => {
         document.getElementById('modalTitle').innerText = "Tambah Fasilitas Baru";
         document.getElementById('id_kategori').value = "";
@@ -137,7 +134,6 @@ try {
         modal.show();
     });
 
-    // Fungsi untuk mode Edit
     function editFasilitas(id, nama) {
         document.getElementById('modalTitle').innerText = "Edit Nama Fasilitas";
         document.getElementById('id_kategori').value = id;

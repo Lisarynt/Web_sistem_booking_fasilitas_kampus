@@ -1,16 +1,13 @@
 <?php
 require_once 'koneksi/connection.php';
 
-// --- PROTEKSI BACKEND (WAJIB UAS) ---
 $token = $_COOKIE['admin_auth_token'] ?? ''; 
 if (!$token) {
     header("Location: login_admin.php");
     exit();
 }
 
-// Ambil data dari database untuk laporan
 try {
-    // Validasi token ke tabel admins
     $tokenHash = hash('sha256', $token);
     $check = $database_connection->prepare("SELECT id_admin FROM admins WHERE cookie_token = ? LIMIT 1");
     $check->execute([$tokenHash]);
@@ -46,7 +43,6 @@ try {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     
     <style>
-        /* Mengambil style dari Dashboard Admin Anda */
         body { background-color: #F8F9FD; font-family: 'Inter', sans-serif; }
         .sidebar { width: 260px; height: 100vh; background: #1A1C1E; color: #fff; position: fixed; padding: 30px 20px; }
         .main-content { margin-left: 260px; padding: 40px; min-height: 100vh; }
@@ -78,18 +74,19 @@ try {
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold">Laporan Central Control 📊</h2>
-            <p class="text-muted">Rekapitulasi seluruh data peminjaman fasilitas.</p>
+            <p class="text-muted">Rekapitulasi seluruh data peminjaman dalam format Excel.</p>
         </div>
-        <button onclick="downloadLaporanPDF()" class="btn btn-export shadow-sm">
-            <i class="bi bi-file-earmark-pdf-fill me-2"></i> Eksport PDF
+        <button onclick="downloadLaporanExcel()" class="btn btn-export shadow-sm">
+            <i class="bi bi-file-earmark-spreadsheet-fill me-2"></i> Eksport Excel
         </button>
     </div>
 
-    <div class="report-card">
+<div class="report-card">
         <div class="table-responsive">
-            <table class="table table-hover align-middle">
+            <table class="table table-hover align-middle" id="tabelLaporan">
                 <thead class="table-light">
                     <tr>
+                        <th class="py-3">NIM</th>
                         <th class="py-3">Peminjam</th>
                         <th class="py-3">Fasilitas</th>
                         <th class="py-3">Waktu Pinjam</th>
@@ -99,10 +96,8 @@ try {
                 <tbody>
                     <?php foreach ($semua_data as $row): ?>
                     <tr>
-                        <td>
-                            <div class="fw-bold"><?= htmlspecialchars($row['nama']) ?></div>
-                            <div class="small text-muted"><?= $row['nim'] ?></div>
-                        </td>
+                        <td><?= $row['nim'] ?></td>
+                        <td class="fw-bold"><?= htmlspecialchars($row['nama']) ?></td>
                         <td><?= htmlspecialchars($row['nama_kategori']) ?></td>
                         <td><?= date('d M Y, H:i', strtotime($row['tgl_pinjam'])) ?></td>
                         <td>
@@ -124,42 +119,13 @@ try {
 </div>
 
 <script>
-function downloadLaporanPDF() {
-    var docDefinition = {
-        content: [
-            { text: 'LAPORAN PEMINJAMAN UNIRESERVE', style: 'header', alignment: 'center' },
-            { text: 'Dicetak pada: <?= date('d M Y H:i') ?>\n\n', alignment: 'right', fontSize: 9 },
-            {
-                table: {
-                    headerRows: 1,
-                    widths: [80, '*', 'auto', 'auto', 'auto'],
-                    body: [
-                        [
-                            { text: 'NIM', bold: true, fillColor: '#B4F481' },
-                            { text: 'Nama Mahasiswa', bold: true, fillColor: '#B4F481' },
-                            { text: 'Fasilitas', bold: true, fillColor: '#B4F481' },
-                            { text: 'Tgl Pinjam', bold: true, fillColor: '#B4F481' },
-                            { text: 'Status', bold: true, fillColor: '#B4F481' }
-                        ],
-                        <?php foreach ($semua_data as $row): ?>
-                        [
-                            '<?= $row['nim'] ?>',
-                            '<?= htmlspecialchars($row['nama']) ?>',
-                            '<?= htmlspecialchars($row['nama_kategori']) ?>',
-                            '<?= date('d/m/Y', strtotime($row['tgl_pinjam'])) ?>',
-                            '<?= $row['status_pengajuan'] ?>'
-                        ],
-                        <?php endforeach; ?>
-                    ]
-                },
-                layout: 'lightHorizontalLines'
-            }
-        ],
-        styles: {
-            header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10] }
-        }
-    };
-    pdfMake.createPdf(docDefinition).download('Laporan_Admin_UniReserve.pdf');
+function downloadLaporanExcel() {
+    var table = document.getElementById("tabelLaporan");
+    var ws = XLSX.utils.table_to_sheet(table);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Laporan Peminjaman");
+    var fileName = "Laporan_UniReserve_" + new Date().toLocaleDateString().replace(/\//g, '-') + ".xlsx";
+    XLSX.writeFile(wb, fileName);
 }
 </script>
 

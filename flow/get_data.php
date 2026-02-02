@@ -1,8 +1,6 @@
 <?php
-// flow/get_data.php
 require_once '../koneksi/connection.php';
 
-// Pengecekan Token sesuai standar dosen kamu
 $token = $_COOKIE['user_auth_token'] ?? '';
 if ($token === '') {
     http_response_code(401);
@@ -22,8 +20,6 @@ try {
 
     $id_mahasiswa = $user['id'];
 
-    // Query untuk mengambil riwayat peminjaman user tersebut
-    // Kita gunakan JOIN agar nama kategori fasilitasnya ikut terbawa
     $sql = "SELECT p.*, k.nama_kategori 
             FROM `peminjaman` p
             JOIN `kategori_fasilitas` k ON p.id_kategori = k.id_kategori
@@ -35,12 +31,10 @@ try {
 
     $data = $connect->fetchAll(PDO::FETCH_ASSOC);
 
-    // Mengirimkan hasil dalam format JSON agar bisa dibaca oleh Chart.js atau tabel dinamis
     header('Content-Type: application/json');
     echo json_encode($data);
 
 } catch (PDOException $e) {
-    // Menggunakan variabel $database_name dari connection.php
     http_response_code(500);
     echo json_encode([
         "success" => false, 

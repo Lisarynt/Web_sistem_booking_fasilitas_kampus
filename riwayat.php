@@ -1,6 +1,5 @@
 <?php
 require_once 'koneksi/connection.php';
-// Ambil token dari cookie
 $token = $_COOKIE['user_auth_token'] ?? ''; 
 
 if (!$token) {
@@ -8,7 +7,6 @@ if (!$token) {
     exit();
 }
 
-// Cari user berdasarkan TOKEN (Sama seperti di Dashboard)
 $tokenHash = hash('sha256', $token);
 $sql_user = "SELECT id FROM data_user WHERE token = ?";
 $stmt_user = $database_connection->prepare($sql_user);
@@ -20,10 +18,9 @@ if (!$user) {
     exit();
 }
 
-$id_user = $user['id']; // Sekarang berisi ID pengguna yang login
+$id_user = $user['id']; 
 
 try {
-    // Ambil data riwayat pinjam gabung dengan nama kategori (JOIN)
     $sql = "SELECT p.*, k.nama_kategori 
             FROM peminjaman p 
             JOIN kategori_fasilitas k ON p.id_kategori = k.id_kategori 

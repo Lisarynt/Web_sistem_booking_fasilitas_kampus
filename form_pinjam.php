@@ -19,10 +19,8 @@ if (!$user_logged) {
     header("Location: login.php");
     exit();
 }
-// Ambil ID untuk simpan ke database nanti
 $id_mahasiswa_login = $user_logged['id'];
 
-// AMBIL DATA LAMA JIKA SEDANG MODE EDIT
 $data_edit = null;
 if (isset($_GET['edit'])) {
     $id_edit = $_GET['edit'];
@@ -31,7 +29,6 @@ if (isset($_GET['edit'])) {
     $data_edit = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// Ambil data kategori untuk dropdown
 try {
     $query_kategori = $database_connection->query("SELECT * FROM kategori_fasilitas");
     $categories = $query_kategori->fetchAll(PDO::FETCH_ASSOC);
@@ -61,7 +58,6 @@ try {
 
     <?php include 'checkcookie.php'; ?>
     <script>
-        // Jalankan fungsi dari checkcookie.php
         checkLoginStatus(); 
     </script>
 </head>
@@ -166,7 +162,6 @@ try {
             label.innerText = 'Jumlah/Kapasitas';
         }
     }
-    // Panggil sekali saat load jika sedang mode edit agar label benar
     window.onload = updateLabel;
 </script>
 

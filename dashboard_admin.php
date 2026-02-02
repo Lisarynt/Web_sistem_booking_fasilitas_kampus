@@ -4,7 +4,6 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 require_once 'koneksi/connection.php';
 
-// Logika Keamanan: Cek apakah yang login adalah admin
 $token = $_COOKIE['admin_auth_token'] ?? ''; 
 if (!$token) {
     header("Location: login_admin.php");
@@ -19,15 +18,12 @@ try {
     $admin = $stmt_admin->fetch(PDO::FETCH_ASSOC);
 
     if (!$admin) {
-        // Jika token tidak valid atau bukan admin, hapus cookie dan tendang keluar
         setcookie("admin_auth_token", "", time() - 3600, "/");
         header("Location: login_admin.php");
         exit();
     }
 
-    // Jika lolos, ambil nama admin untuk tampilan
     $nama_admin = $admin['username'];
-    // Ambil Data Statistik Utama
     
     $sql_stat = "SELECT 
         COUNT(CASE WHEN status_pengajuan = 'Pending' THEN 1 END) as pending,
@@ -37,7 +33,6 @@ try {
     $stmt_stat = $database_connection->query($sql_stat);
     $stat = $stmt_stat->fetch(PDO::FETCH_ASSOC);
 
-    // Ambil Daftar Pengajuan yang perlu divalidasi (Status Pending)
     $sql_pending = "SELECT p.*, u.nama, k.nama_kategori 
                     FROM peminjaman p
                     JOIN data_user u ON p.id = u.id
@@ -71,7 +66,6 @@ try {
     </style>
     <script src="checkcookie.php"></script>
     <script>
-    // Cek status login saat halaman dimuat
     checkLoginStatus().then(isValid => {
         if (!isValid) {
             window.location.href = "login_admin.php";

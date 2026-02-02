@@ -15,11 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $token = bin2hex(random_bytes(32));
             $tokenHash = hash('sha256', $token);
 
-            // Update cookie_token di database
             $upd = $database_connection->prepare("UPDATE admins SET cookie_token = ? WHERE id_admin = ?");
             $upd->execute([$tokenHash, (int)$admin['id_admin']]);
 
-            // Set Cookie
             setcookie("admin_auth_token", $token, [
                 'expires' => time() + (60 * 60 * 24),
                 'path' => '/',

@@ -1,8 +1,6 @@
 <?php
-// 1. Logic PHP (Tetap di bagian paling atas)
 require_once 'koneksi/connection.php';
 
-// Cek apakah ada request POST (baik via Fetch JSON atau Form biasa)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $in = json_decode(file_get_contents("php://input"), true) ?? $_POST;
 

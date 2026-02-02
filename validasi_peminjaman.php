@@ -1,7 +1,6 @@
 <?php
 require_once 'koneksi/connection.php';
 
-// Proteksi Admin
 $token = $_COOKIE['admin_auth_token'] ?? ''; 
 if (!$token) {
     header("Location: login_admin.php");
@@ -16,7 +15,6 @@ try {
         header("Location: login_admin.php");
         exit();
     }
-    // Ambil semua data peminjaman, gabung dengan nama user dan nama kategori
     $sql = "SELECT p.*, u.nama, u.nim, k.nama_kategori 
             FROM peminjaman p
             JOIN data_user u ON p.id = u.id

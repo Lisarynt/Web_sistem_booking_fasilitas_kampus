@@ -1,8 +1,6 @@
 <?php
-// Mengambil koneksi dengan naik satu level folder
 require_once "../koneksi/connection.php";
 
-// Pengecekan Token sesuai referensi dosen
 $token = $_COOKIE['user_auth_token'] ?? '';
 
 if ($token === '') {
@@ -11,7 +9,6 @@ if ($token === '') {
     exit;
 }
 
-// Ambil ID user asli dari database berdasarkan Token yang sedang login
 $tokenHash = hash('sha256', $token);
 $stmt_user = $database_connection->prepare("SELECT id FROM data_user WHERE token = ?");
 $stmt_user->execute([$tokenHash]);
@@ -28,9 +25,7 @@ $tgl_pinjam = $_POST['tgl_pinjam'];
 $tgl_kembali = $_POST['tgl_kembali'];
 $deskripsi = $_POST['deskripsi_kegiatan'];
 
-// Logika Insert & Update sesuai referensi dosen
 if (!empty($_POST["id_peminjaman"])) {
-    // UPDATE DATA: Jika mahasiswa ingin mengubah jadwal atau deskripsi
     $sql = "UPDATE `peminjaman` 
             SET `id_kategori` = ?, 
                 `kapasitas_jumlah` = ?, 
@@ -51,10 +46,8 @@ if (!empty($_POST["id_peminjaman"])) {
     ]);
     
     header("Location: ../riwayat.php?status=updated");
-    // Kamu bisa ganti echo dengan header("Location: ../riwayat.php");
 
 } else {
-    // INSERT DATA: Jika ini pengajuan baru
     $sql = "INSERT INTO `peminjaman` 
             (`id`, `id_kategori`, `kapasitas_jumlah`, `deskripsi_kegiatan`, `tgl_pinjam`, `tgl_kembali`, `status_pengajuan`) 
             VALUES (?, ?, ?, ?, ?, ?, ?);";
@@ -67,10 +60,9 @@ if (!empty($_POST["id_peminjaman"])) {
         $deskripsi,
         $tgl_pinjam,
         $tgl_kembali,
-        'Pending' // Status awal selalu Pending
+        'Pending'
     ]);
     
     header("Location: ../riwayat.php?status=success");
-    // Kamu bisa ganti echo dengan header("Location: ../riwayat.php");
 }
 ?>

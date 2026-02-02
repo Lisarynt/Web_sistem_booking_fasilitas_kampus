@@ -9,14 +9,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <script>
-        // Logika Logout (Frontend)
         const btnLogout = document.getElementById('logout');
         if (btnLogout) {
             btnLogout.addEventListener('click', async (e) => {
                 e.preventDefault();
                 if (confirm('Yakin ingin keluar?')) {
                     try {
-                        // Logout akan menghapus token di database (Backend)
                         const response = await fetch('flow/logout.php');
                         const result = await response.json();
                         

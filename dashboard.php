@@ -1,7 +1,6 @@
 <?php
 require_once 'koneksi/connection.php';
 
-// 1. Ambil token dari cookie
 $token = $_COOKIE['user_auth_token'] ?? ''; 
 
 if (!$token) {
@@ -10,7 +9,6 @@ if (!$token) {
 }
 
 try {
-    // 2. Cari user berdasarkan TOKEN
     $tokenHash = hash('sha256', $token);
     $sql_user = "SELECT id, nama FROM data_user WHERE token = ?";
     $stmt_user = $database_connection->prepare($sql_user);
@@ -24,9 +22,8 @@ try {
     }
 
     $id_mhs = $user['id']; 
-    $nama_user = $user['nama']; // Variabel untuk inisial
+    $nama_user = $user['nama']; 
 
-    // 3. Hitung statistik status peminjaman (SUDAH DINAMIS)
     $sql_stat = "SELECT 
         COUNT(CASE WHEN status_pengajuan = 'Pending' THEN 1 END) as pending,
         COUNT(CASE WHEN status_pengajuan = 'Disetujui' THEN 1 END) as sukses,
@@ -40,7 +37,6 @@ try {
     $sukses_count = (int)($stat['sukses'] ?? 0);
     $gagal_count = (int)($stat['gagal'] ?? 0);
 
-    // Query grafik: Ambil data mulai hari ini (NOW) sampai 7 hari ke depan
     $sql_chart = "SELECT WEEKDAY(tgl_pinjam) as index_hari, COUNT(*) as total 
                 FROM peminjaman 
                 WHERE id = ? 
@@ -83,7 +79,6 @@ try {
         .btn-action-primary { background: #1A1C1E; color: #fff; border-radius: 12px; padding: 12px; width: 100%; border: none; font-weight: 600; margin-bottom: 12px; }
         .btn-action-outline { background: transparent; color: #1A1C1E; border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; width: 100%; font-weight: 600; }
         
-        /* Dropdown Styling */
         .dropdown-menu { border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 15px; padding: 10px; }
         .dropdown-item { border-radius: 8px; padding: 10px 15px; transition: 0.2s; }
         .dropdown-item:hover { background-color: #F8F9FD; color: #1A1C1E; }

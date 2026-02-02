@@ -6,7 +6,6 @@ if (!$token) {
     header("Location: login.php");
     exit();
 }
-// Cek validitas token ke DB (Sama seperti dashboard)
 $tokenHash = hash('sha256', $token);
 $stmt_auth = $database_connection->prepare("SELECT id FROM data_user WHERE token = ?");
 $stmt_auth->execute([$tokenHash]);
@@ -16,7 +15,6 @@ if (!$stmt_auth->fetch()) {
 }
 
 try {
-    // Mengambil semua data kategori fasilitas
     $query = $database_connection->query("SELECT * FROM kategori_fasilitas");
     $fasilitas = $query->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -38,7 +36,6 @@ try {
         .nav-link { color: #8E9196; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; transition: 0.3s; text-decoration: none; display: block; }
         .nav-link:hover, .nav-link.active { background: #B4F481; color: #1A1C1E; font-weight: 600; }
         
-        /* Card Styling ala Eduplex */
         .katalog-card { border: none; border-radius: 20px; transition: 0.3s; background: #fff; overflow: hidden; }
         .katalog-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .icon-box { width: 60px; height: 60px; background: #F0FDF4; color: #16A34A; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 24px; mb-3; }

@@ -12,7 +12,6 @@ if ($token === '') {
 try {
     $tokenHash = hash('sha256', $token);
 
-    // SESUAIKAN: Ambil kolom id, nim, nama dari tabel data_user
     $stmt = $database_connection->prepare(
         "SELECT id, nim, nama, role FROM data_user WHERE token=? LIMIT 1"
     );

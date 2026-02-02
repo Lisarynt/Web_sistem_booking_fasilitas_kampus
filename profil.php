@@ -1,14 +1,12 @@
 <?php
 require_once 'koneksi/connection.php';
 
-// 1. Ambil Token untuk identitas user
 $token = $_COOKIE['user_auth_token'] ?? '';
 if ($token === '') {
     header("Location: index.php");
     exit;
 }
 
-// 2. Ambil data user dari database berdasarkan token
 $tokenHash = hash('sha256', $token);
 $stmt = $database_connection->prepare("SELECT * FROM data_user WHERE token = ?");
 $stmt->execute([$tokenHash]);
@@ -37,7 +35,6 @@ $nim_user = $user['nim'];
         .nav-link { color: #8E9196; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; transition: 0.3s; text-decoration: none; display: block; }
         .nav-link:hover, .nav-link.active { background: #B4F481; color: #1A1C1E; font-weight: 600; }
         
-        /* Horizontal Profile Card */
         .profile-card-horizontal { 
             background: #fff; 
             border-radius: 25px; 

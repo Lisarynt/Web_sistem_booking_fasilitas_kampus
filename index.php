@@ -17,7 +17,6 @@
         }
     }
 
-    // Alur: Cek login -> Arahkan ke Dashboard atau Login
     checkLoginStatus().then(isLoggedIn => {
         if (isLoggedIn) {
             window.location.href = "dashboard.php";
