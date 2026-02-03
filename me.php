@@ -29,7 +29,7 @@ try {
         "data" => [
             "id" => (int)$user['id'],
             "nim" => $user['nim'] ?? 'ADMIN',
-            "nama" => $user['nama']
+            "nama" => $user['nama'],
             "role" => $user['role']
         ]
     ]);

@@ -1,18 +1,18 @@
 <?php
 require_once '../koneksi/connection.php';
 
-$token = $_COOKIE['admin_auth_token'] ?? ''; 
+$token = $_COOKIE['admin_auth_token'] ?? '';
 if (!$token) { 
     header("Location: ../login_admin.php");
     exit(); 
 }
 
 $tokenHash = hash('sha256', $token);
-$stmt_admin = $database_connection->prepare("SELECT role FROM data_user WHERE token = ? AND role = 'admin'");
+$stmt_admin = $database_connection->prepare("SELECT id_admin FROM admins WHERE cookie_token = ?");
 $stmt_admin->execute([$tokenHash]);
 
 if (!$stmt_admin->fetch()) {
-    die("Akses Ditolak: Anda bukan Admin!");
+    die("Akses Ditolak: Sesi tidak valid.");
 }
 
 if (isset($_GET['hapus'])) {

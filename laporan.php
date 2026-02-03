@@ -124,6 +124,7 @@ function downloadLaporanExcel() {
     var ws = XLSX.utils.table_to_sheet(table);
     var wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Laporan Peminjaman");
+
     var fileName = "Laporan_UniReserve_" + new Date().toLocaleDateString().replace(/\//g, '-') + ".xlsx";
     XLSX.writeFile(wb, fileName);
 }
